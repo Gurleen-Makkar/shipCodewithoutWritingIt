@@ -1,514 +1,1528 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ship Code. Without Writing It.</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --aurora-color-1: #7dd3fc; /* sky-300 */
-            --aurora-color-2: #a78bfa; /* violet-400 */
-            --aurora-color-3: #f472b6; /* pink-400 */
-            --aurora-color-4: #fbbf24; /* amber-400 */
-            --aurora-color-5: #34d399; /* emerald-400 */
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ship Code. Without Writing It.</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --aurora-color-1: #7dd3fc; /* sky-300 */
+                --aurora-color-2: #a78bfa; /* violet-400 */
+                --aurora-color-3: #f472b6; /* pink-400 */
+                --aurora-color-4: #fbbf24; /* amber-400 */
+                --aurora-color-5: #34d399; /* emerald-400 */
+            }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #E2E8F0; /* slate-200 */
-            overflow: hidden;
-        }
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #0a0a0a;
+                color: #e2e8f0; /* slate-200 */
+                overflow: hidden;
+            }
 
-        .aurora-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.3;
-        }
+            .aurora-background {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                opacity: 0.3;
+            }
 
-        .aurora-background::before,
-        .aurora-background::after {
-            content: '';
-            position: absolute;
-            filter: blur(80px);
-            mix-blend-mode: screen;
-        }
+            .aurora-background::before,
+            .aurora-background::after {
+                content: '';
+                position: absolute;
+                filter: blur(80px);
+                mix-blend-mode: screen;
+            }
 
-        .aurora-background::before {
-            background: radial-gradient(circle at 20% 30%, var(--aurora-color-1), transparent 50%),
-                        radial-gradient(circle at 80% 40%, var(--aurora-color-2), transparent 50%);
-            width: 150%;
-            height: 150%;
-            animation: spin 25s linear infinite alternate;
-        }
+            .aurora-background::before {
+                background: radial-gradient(
+                        circle at 20% 30%,
+                        var(--aurora-color-1),
+                        transparent 50%
+                    ),
+                    radial-gradient(
+                        circle at 80% 40%,
+                        var(--aurora-color-2),
+                        transparent 50%
+                    );
+                width: 150%;
+                height: 150%;
+                animation: spin 25s linear infinite alternate;
+            }
 
-        .aurora-background::after {
-            background: radial-gradient(circle at 50% 80%, var(--aurora-color-3), transparent 50%),
-                        radial-gradient(circle at 10% 90%, var(--aurora-color-4), transparent 50%),
-                        radial-gradient(circle at 90% 10%, var(--aurora-color-5), transparent 50%);
-            width: 120%;
-            height: 120%;
-            animation: spin 35s linear infinite;
-        }
+            .aurora-background::after {
+                background: radial-gradient(
+                        circle at 50% 80%,
+                        var(--aurora-color-3),
+                        transparent 50%
+                    ),
+                    radial-gradient(
+                        circle at 10% 90%,
+                        var(--aurora-color-4),
+                        transparent 50%
+                    ),
+                    radial-gradient(
+                        circle at 90% 10%,
+                        var(--aurora-color-5),
+                        transparent 50%
+                    );
+                width: 120%;
+                height: 120%;
+                animation: spin 35s linear infinite;
+            }
 
-        @keyframes spin {
-            from { transform: rotate(0deg) scale(1); }
-            to { transform: rotate(360deg) scale(1.2); }
-        }
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg) scale(1);
+                }
+                to {
+                    transform: rotate(360deg) scale(1.2);
+                }
+            }
 
-        .slide-container {
-            width: 100%;
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-        }
-        .slide {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            scroll-snap-align: start;
-            padding: 40px;
-            box-sizing: border-box;
-            position: relative;
-        }
-        .slide-content {
-            max-width: 1100px;
-            width: 100%;
-        }
+            .slide-container {
+                width: 100%;
+                height: 100vh;
+                overflow-y: scroll;
+                scroll-snap-type: y mandatory;
+                scroll-behavior: smooth;
+            }
+            .slide {
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                scroll-snap-align: start;
+                padding: 40px;
+                box-sizing: border-box;
+                position: relative;
+            }
+            .slide-content {
+                max-width: 1100px;
+                width: 100%;
+            }
 
-        .gradient-text {
-            background: linear-gradient(90deg, var(--aurora-color-1), var(--aurora-color-3), var(--aurora-color-5));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-        
-        h1, h2 {
-            font-weight: 800;
-        }
+            .gradient-text {
+                background: linear-gradient(
+                    90deg,
+                    var(--aurora-color-1),
+                    var(--aurora-color-3),
+                    var(--aurora-color-5)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                text-fill-color: transparent;
+            }
 
-        .card {
-            background-color: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
-        }
+            h1,
+            h2 {
+                font-weight: 800;
+            }
 
-        .flow-diagram .node {
-            background-color: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            min-width: 150px;
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        .flow-diagram .node:hover {
-            background-color: rgba(0, 0, 0, 0.5);
-            transform: scale(1.05);
-        }
+            .card {
+                background-color: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s ease;
+            }
+            .card:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                transform: translateY(-5px);
+            }
 
-        .flow-diagram .arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94A3B8; /* slate-400 */
-        }
-        .footer, .slide-number, .logo {
-            position: absolute;
-            font-size: 0.875rem;
-            color: #94A3B8; /* slate-400 */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        .footer { bottom: 20px; left: 40px; }
-        .slide-number { bottom: 20px; right: 40px; }
-        .logo { top: 20px; left: 40px; font-weight: 600; }
-        
-        .icon-color-1 { color: var(--aurora-color-1); }
-        .icon-color-2 { color: var(--aurora-color-2); }
-        .icon-color-3 { color: var(--aurora-color-3); }
-        .icon-color-4 { color: var(--aurora-color-4); }
-        .icon-color-5 { color: var(--aurora-color-5); }
-    </style>
-</head>
-<body>
-    <div class="aurora-background"></div>
-    <div class="slide-container">
+            .flow-diagram .node {
+                background-color: rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                padding: 1rem 1.5rem;
+                border-radius: 0.75rem;
+                text-align: center;
+                min-width: 150px;
+                min-height: 140px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.3s ease;
+            }
+            .flow-diagram .node:hover {
+                background-color: rgba(0, 0, 0, 0.5);
+                transform: scale(1.05);
+            }
 
-        <!-- Slide 1: Title Slide -->
-        <div class="slide" id="slide1">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content text-center">
-                <h1 class="text-6xl md:text-8xl font-bold mb-4">Ship Code.</h1>
-                <h1 class="text-6xl md:text-8xl font-bold mb-8 gradient-text">Without Writing It.</h1>
-                <p class="text-2xl md:text-3xl text-slate-300 mb-12">How AI-First Engineering is Automating Software Development</p>
-                <div>
-                    <p class="text-xl font-medium">Gurleen Kaur & Keerthivasan Devaraj</p>
-                    <p class="text-lg text-slate-400">Piramal Finance</p>
-                </div>
-            </div>
-            <div class="footer">Ship Code. Without Writing It.</div>
-            <div class="slide-number">1 / 14</div>
-        </div>
+            .flow-diagram .arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #94a3b8; /* slate-400 */
+            }
+            .footer,
+            .slide-number,
+            .logo {
+                position: absolute;
+                font-size: 0.875rem;
+                color: #94a3b8; /* slate-400 */
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            }
+            .footer {
+                bottom: 20px;
+                left: 40px;
+            }
+            .slide-number {
+                bottom: 20px;
+                right: 40px;
+            }
+            .logo {
+                top: 20px;
+                left: 40px;
+                font-weight: 600;
+            }
 
-        <!-- Slide 2: The "What If?" -->
-        <div class="slide" id="slide2">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content text-center">
-                <h2 class="text-5xl md:text-7xl font-bold mb-8">What if assigning a Jira ticket...</h2>
-                <div class="card rounded-xl p-8 inline-block shadow-lg">
-                    <i class="fab fa-jira text-6xl icon-color-1 mb-4"></i>
-                    <p class="text-2xl md:text-3xl">...was all it took to kick off <span class="font-semibold" style="color: var(--aurora-color-5);">actual development?</span></p>
-                </div>
-                <p class="text-xl text-slate-300 mt-8">This isn't a demo of what <span class="font-semibold text-slate-200">could</span> happen. It’s what’s <span class="font-semibold text-slate-200">already</span> happening.</p>
-            </div>
-            <div class="footer">The Core Premise</div>
-            <div class="slide-number">2 / 14</div>
-        </div>
+            .icon-color-1 {
+                color: var(--aurora-color-1);
+            }
+            .icon-color-2 {
+                color: var(--aurora-color-2);
+            }
+            .icon-color-3 {
+                color: var(--aurora-color-3);
+            }
+            .icon-color-4 {
+                color: var(--aurora-color-4);
+            }
+            .icon-color-5 {
+                color: var(--aurora-color-5);
+            }
 
-        <!-- Slide 3: Agenda -->
-        <div class="slide" id="slide3">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-12 text-center">What We'll Cover Today</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xl">
-                    <div class="card rounded-lg p-6 flex items-center space-x-4">
-                        <span class="icon-color-1 text-2xl font-bold">1</span>
-                        <p>The Evolution: From LLMs to Multi-Agent Systems</p>
-                    </div>
-                    <div class="card rounded-lg p-6 flex items-center space-x-4">
-                        <span class="icon-color-3 text-2xl font-bold">2</span>
-                        <p>Our Semi-Autonomous Workflow: <span class="font-semibold">CLINE + Custom MCPs</span></p>
-                    </div>
-                    <div class="card rounded-lg p-6 flex items-center space-x-4">
-                        <span class="icon-color-4 text-2xl font-bold">3</span>
-                        <p>The Fully Autonomous Flow: <span class="font-semibold">N8N Agentic Workflows</span></p>
-                    </div>
-                    <div class="card rounded-lg p-6 flex items-center space-x-4">
-                        <span class="icon-color-5 text-2xl font-bold">4</span>
-                        <p>The Human's Role: What to Automate, What to Control</p>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">Agenda</div>
-            <div class="slide-number">3 / 14</div>
-        </div>
+            .step-hidden {
+                opacity: 0;
+                transform: translateY(20px);
+                pointer-events: none;
+            }
 
-        <!-- Slide 4: NEW - LLM Models -->
-        <div class="slide" id="slide4">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-4 text-center">The Foundation: LLM Models</h2>
-                <h3 class="text-3xl text-center text-slate-300 mb-10">The "Pre-Agent" Era: Pre-Defined Control Logic</h3>
-                <div class="flow-diagram">
-                    <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg">
-                        <div class="node"><i class="fas fa-plane-departure text-4xl mb-2"></i><p>User wants a travel plan for Goa</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-right"></i></div>
-                        <div class="node"><i class="fas fa-database text-4xl icon-color-1 mb-2"></i><p>System gathers all data (flights, hotels, etc.)</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-right"></i></div>
-                        <div class="node"><i class="fas fa-brain text-4xl icon-color-4 mb-2"></i><p>LLM receives all data to generate the plan</p></div>
-                    </div>
-                </div>
-                <p class="text-center mt-10 text-xl text-slate-300">Here, the path is rigid. The program gathers all information upfront and feeds it to the LLM in one go.</p>
-            </div>
-            <div class="footer">The Evolution of AI</div>
-            <div class="slide-number">4 / 14</div>
-        </div>
+            .step-visible {
+                opacity: 1;
+                transform: translateY(0);
+                transition: all 0.6s ease-out;
+            }
 
-        <!-- Slide 5: NEW - AI Agents -->
-        <div class="slide" id="slide5">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-4 text-center gradient-text">The Leap: Autonomous AI Agents</h2>
-                <h3 class="text-3xl text-center text-slate-300 mb-10">A Shift to Autonomy: The Path is NOT Pre-defined</h3>
-                <div class="text-center">
-                    <div class="card rounded-xl p-6 inline-block shadow-lg mb-8">
-                        <p class="text-2xl md:text-3xl">"How much sunscreen should I pack for my trip?"</p>
-                    </div>
-                </div>
-                <div class="flow-diagram">
-                    <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg">
-                         <div class="node"><i class="fas fa-cloud-sun text-4xl icon-color-4 mb-2"></i><p>Search the weather</p></div>
-                         <div class="arrow text-2xl"><i class="fas fa-long-arrow-alt-right"></i></div>
-                         <div class="node"><i class="fas fa-sun text-4xl icon-color-4 mb-2"></i><p>Check UV index</p></div>
-                         <div class="arrow text-2xl"><i class="fas fa-long-arrow-alt-right"></i></div>
-                         <div class="node"><i class="fas fa-flask text-4xl icon-color-5 mb-2"></i><p>Analyze chemical formulations</p></div>
-                    </div>
-                </div>
-                <p class="text-center mt-10 text-xl text-slate-300">The Agent has the autonomy to decide its own steps. It can use different tools and search for information as needed to solve the problem.</p>
-            </div>
-            <div class="footer">The Evolution of AI</div>
-            <div class="slide-number">5 / 14</div>
-        </div>
-
-        <!-- Slide 6: NEW - Multi-Agent Systems -->
-        <div class="slide" id="slide6">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-4 text-center">The Symphony: Multi-Agent Systems</h2>
-                <h3 class="text-3xl text-center text-slate-300 mb-10">Specialized Agents, Orchestrated for Complex Tasks</h3>
-                <div class="flow-diagram">
-                     <div class="text-center mb-6">
-                        <div class="node inline-block"><i class="fas fa-user-tie text-4xl text-white mb-2"></i><p><strong>Manager Agent</strong><br>Receives Goal</p></div>
-                     </div>
-                     <div class="flex justify-center mb-2"><div class="arrow text-4xl"><i class="fas fa-arrow-down"></i></div></div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 items-start gap-8 text-lg">
-                        <div class="node"><i class="fas fa-drafting-compass text-4xl icon-color-3 mb-2"></i><p><strong>Design Agent</strong><br>Creates HLD/LLD</p></div>
-                        <div class="node"><i class="fas fa-code text-4xl icon-color-5 mb-2"></i><p><strong>Developer Agent</strong><br>Writes the code</p></div>
-                        <div class="node"><i class="fas fa-vial text-4xl icon-color-1 mb-2"></i><p><strong>QA Agent</strong><br>Tests the feature</p></div>
-                    </div>
-                </div>
-                <p class="text-center mt-10 text-xl text-slate-300">A team of experts. A manager agent orchestrates specialized agents to achieve a complex goal, like building a new software feature.</p>
-            </div>
-            <div class="footer">The Evolution of AI</div>
-            <div class="slide-number">6 / 14</div>
-        </div>
-
-        <!-- Slide 7: The Problem -->
-        <div class="slide" id="slide7">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-8 text-center gradient-text">The Developer's "Toil"</h2>
-                <p class="text-2xl text-center text-slate-300 mb-12">So much of a developer's time is spent on tasks that aren't pure coding.</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                    <div class="card rounded-lg p-6">
-                        <i class="fas fa-code-branch text-4xl icon-color-1 mb-3"></i>
-                        <h3 class="text-xl font-semibold">Branching & Merging</h3>
-                    </div>
-                    <div class="card rounded-lg p-6">
-                        <i class="fas fa-ticket-alt text-4xl icon-color-5 mb-3"></i>
-                        <h3 class="text-xl font-semibold">Ticket Updates</h3>
-                    </div>
-                    <div class="card rounded-lg p-6">
-                        <i class="fas fa-cogs text-4xl icon-color-4 mb-3"></i>
-                        <h3 class="text-xl font-semibold">Boilerplate Code</h3>
-                    </div>
-                    <div class="card rounded-lg p-6">
-                        <i class="fas fa-sync-alt text-4xl icon-color-3 mb-3"></i>
-                        <h3 class="text-xl font-semibold">Context Switching</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">The Problem Space</div>
-            <div class="slide-number">7 / 14</div>
-        </div>
-
-        <!-- Slide 8: Solution Part 1 - CLINE -->
-        <div class="slide" id="slide8">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-4 text-center">Our First Step: Semi-Autonomy</h2>
-                <h3 class="text-3xl text-center text-slate-300 mb-10">Using <span class="font-semibold icon-color-1">CLINE</span> + Custom MCPs</h3>
-                <div class="flow-diagram">
-                    <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg">
-                        <div class="node"><i class="fas fa-user-edit text-4xl mb-2"></i><p>Developer provides Jira ID to CLINE</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-right"></i></div>
-                        <div class="node"><i class="fas fa-robot text-4xl icon-color-1 mb-2"></i><p>CLINE Agent reads Jira, analyzes task</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-right"></i></div>
-                        <div class="node"><i class="fas fa-code text-4xl icon-color-5 mb-2"></i><p>Generates code, creates branch, writes commit</p></div>
-                    </div>
-                    <div class="flex justify-center my-4"><div class="arrow text-4xl transform rotate-90 md:rotate-0"><i class="fas fa-arrow-down md:hidden"></i></div></div>
-                    <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg md:mt-4">
-                        <div class="hidden md:block"></div>
-                        <div class="hidden md:block"></div>
-                        <div class="node"><i class="fas fa-code-pull-request text-4xl icon-color-4 mb-2"></i><p>Raises Pull Request</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-left"></i></div>
-                        <div class="node"><i class="fas fa-user-check text-4xl text-white mb-2"></i><p>Human reviews, provides feedback, and merges</p></div>
-                    </div>
-                </div>
-                <p class="text-center mt-10 text-xl text-slate-300">CLINE acts as a developer's assistant, living in VS Code, powered by our custom tools.</p>
-            </div>
-            <div class="footer">Solution: CLINE Workflow</div>
-            <div class="slide-number">8 / 14</div>
-        </div>
-
-        <!-- Slide 9: What are MCPs? -->
-        <div class="slide" id="slide9">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-8 text-center gradient-text">The "Magic": Custom MCPs</h2>
-                <p class="text-2xl text-center text-slate-300 mb-12">MCPs (Multi-Copilot Prompts) are our custom, remote tools that give the agent superpowers.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card rounded-lg p-6 text-center">
-                        <i class="fab fa-jira text-5xl icon-color-1 mb-4"></i>
-                        <h3 class="text-2xl font-semibold mb-2">Jira Tool</h3>
-                        <p class="text-slate-400">Read tickets, add comments, update status.</p>
-                    </div>
-                    <div class="card rounded-lg p-6 text-center">
-                        <i class="fab fa-github text-5xl text-white mb-4"></i>
-                        <h3 class="text-2xl font-semibold mb-2">GitHub Tool</h3>
-                        <p class="text-slate-400">Check out branches, analyze repos, raise PRs.</p>
-                    </div>
-                    <div class="card rounded-lg p-6 text-center">
-                        <i class="fab fa-confluence text-5xl icon-color-2 mb-4"></i>
-                        <h3 class="text-2xl font-semibold mb-2">Confluence Tool</h3>
-                        <p class="text-slate-400">Search for documentation and context.</p>
-                    </div>
-                </div>
-                <p class="text-center mt-12 text-xl">Exposed as SSE endpoints that CLINE connects to, making the system modular and extensible.</p>
-            </div>
-            <div class="footer">MCPs Explained</div>
-            <div class="slide-number">9 / 14</div>
-        </div>
-
-        <!-- Slide 10: Solution Part 2 - N8N -->
-        <div class="slide" id="slide10">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-4 text-center">The Next Frontier: Full Autonomy</h2>
-                <h3 class="text-3xl text-center text-slate-300 mb-10">With <span class="font-semibold icon-color-5">N8N</span> Agentic Workflows</h3>
-                <div class="flow-diagram">
-                    <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg">
-                        <div class="node"><i class="fab fa-jira text-4xl icon-color-1 mb-2"></i><p>Ticket assigned to "AI" user</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-right"></i></div>
-                        <div class="node"><i class="fas fa-brain text-4xl icon-color-4 mb-2"></i><p><strong class="font-semibold">Software Dev Agent</strong> analyzes requirements</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-right"></i></div>
-                        <div class="node"><i class="fas fa-drafting-compass text-4xl icon-color-3 mb-2"></i><p><strong class="font-semibold">Design Studio Agent</strong> creates LLD/HLD</p></div>
-                    </div>
-                    <div class="flex justify-center my-4"><div class="arrow text-4xl transform rotate-90 md:rotate-0"><i class="fas fa-arrow-down md:hidden"></i></div></div>
-                    <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg md:mt-4">
-                        <div class="node"><i class="fas fa-code-pull-request text-4xl icon-color-5 mb-2"></i><p>PR raised for human review</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-left"></i></div>
-                        <div class="node"><i class="fas fa-cogs text-4xl icon-color-1 mb-2"></i><p><strong class="font-semibold">Developer Agent</strong> writes code</p></div>
-                        <div class="arrow text-4xl"><i class="fas fa-arrow-left"></i></div>
-                        <div class="node"><i class="fas fa-user-check text-4xl text-white mb-2"></i><p>Human confirms design in Jira</p></div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">Solution: N8N Workflow</div>
-            <div class="slide-number">10 / 14</div>
-        </div>
-        
-        <!-- Slide 11: Beyond Features - Autonomous RCA -->
-        <div class="slide" id="slide11">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content text-center">
-                <h2 class="text-5xl font-bold mb-8">It's Not Just for Features</h2>
-                <p class="text-2xl text-slate-300 mb-12">We also use autonomous agents for production operations.</p>
-                <div class="card rounded-lg p-8 inline-flex items-center space-x-6 shadow-lg max-w-2xl">
-                    <i class="fas fa-chart-line text-6xl icon-color-4"></i>
-                    <div class="text-left">
-                        <h3 class="text-3xl font-semibold mb-2">Autonomous RCA Agent</h3>
-                        <p class="text-xl text-slate-300">
-                            Monitors <span class="font-semibold">Grafana</span> for alerts, investigates logs, and performs a Root Cause Analysis.
+            .step-element {
+                transition: all 0.6s ease-out;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="aurora-background"></div>
+        <div class="slide-container">
+            <!-- Slide 1: Title Slide -->
+            <div class="slide" id="slide1">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content text-center">
+                    <h1 class="text-6xl md:text-8xl font-bold mb-4">
+                        Ship Code.
+                    </h1>
+                    <h1
+                        class="text-6xl md:text-8xl font-bold pb-8 gradient-text"
+                    >
+                        Without Writing It.
+                    </h1>
+                    <p class="text-2xl md:text-3xl text-slate-300 mb-12">
+                        How AI-First Engineering Teams Are Adapting and Evolving
+                    </p>
+                    <div>
+                        <p class="text-xl md:text-2xl font-bold">
+                            Gurleen Kaur | Keerthivasan Devaraj
+                        </p>
+                        <p class="text-lg text-slate-400 mt-2">
+                            Piramal Finance
                         </p>
                     </div>
                 </div>
-                <p class="text-xl text-slate-300 mt-8">Shifting from reactive to <span class="font-semibold text-slate-200">proactive</span> AI-driven operations.</p>
+                <div class="footer">Ship Code. Without Writing It.</div>
+                <div class="slide-number">1 / 16</div>
             </div>
-            <div class="footer">Expanding the Scope</div>
-            <div class="slide-number">11 / 14</div>
-        </div>
 
-        <!-- Slide 12: The Human Role -->
-        <div class="slide" id="slide12">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-12 text-center gradient-text">Where Do Humans Fit In?</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg">
-                    <div class="card rounded-lg p-6 border-green-400/30">
-                        <h3 class="text-2xl font-semibold mb-3 text-green-300">What to Automate <i class="fas fa-robot ml-2"></i></h3>
-                        <ul class="list-disc list-inside space-y-2 text-slate-300">
-                            <li>Initial code generation & boilerplate</li>
-                            <li>Branching, commits, and PR creation</li>
-                            <li>Ticket status updates and comments</li>
-                            <li>Initial analysis and data gathering (RCA)</li>
-                            <li>Repetitive, predictable tasks</li>
-                        </ul>
+            <!-- Slide 2: The "What If?" -->
+            <div class="slide" id="slide2">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content text-center">
+                    <h2 class="text-5xl md:text-7xl font-bold mb-8">
+                        What if assigning a Jira ticket...
+                    </h2>
+                    <div class="card rounded-xl p-8 inline-block shadow-lg">
+                        <i class="fab fa-jira text-6xl icon-color-1 mb-4"></i>
+                        <p class="text-2xl md:text-3xl">
+                            ...was all it took to kick off
+                            <span
+                                class="font-semibold"
+                                style="color: var(--aurora-color-5)"
+                                >actual development?</span
+                            >
+                        </p>
                     </div>
-                    <div class="card rounded-lg p-6 border-red-400/30">
-                        <h3 class="text-2xl font-semibold mb-3 text-red-300">What to Control <i class="fas fa-user-shield ml-2"></i></h3>
-                        <ul class="list-disc list-inside space-y-2 text-slate-300">
-                            <li>Final code review and approval</li>
-                            <li>Complex architectural decisions</li>
-                            <li>Confirming high-level designs (HLD/LLD)</li>
-                            <li>Defining initial requirements (the Jira ticket)</li>
-                            <li>Handling novel, unexpected problems</li>
-                        </ul>
+                    <p class="text-xl text-slate-300 mt-8">
+                        This isn't a demo of what
+                        <span class="font-semibold text-slate-200">could</span>
+                        happen. It’s what’s
+                        <span class="font-semibold text-slate-200"
+                            >already</span
+                        >
+                        happening.
+                    </p>
+                </div>
+                <div class="footer">The Core Premise</div>
+                <div class="slide-number">2 / 16</div>
+            </div>
+
+            <!-- Slide 3: Agenda -->
+            <div class="slide" id="slide3">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-12 text-center">
+                        What We'll Cover Today
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xl">
+                        <div
+                            class="card rounded-lg p-6 flex items-center space-x-4"
+                        >
+                            <span class="icon-color-1 text-2xl font-bold"
+                                >1</span
+                            >
+                            <p>
+                                The Evolution: From LLMs to Multi-Agent Systems
+                            </p>
+                        </div>
+                        <div
+                            class="card rounded-lg p-6 flex items-center space-x-4"
+                        >
+                            <span class="icon-color-3 text-2xl font-bold"
+                                >2</span
+                            >
+                            <p>
+                                AI-Assisted Development:
+                                <span class="font-semibold"
+                                    >Intelligent IDE + MCPs</span
+                                >
+                            </p>
+                        </div>
+                        <div
+                            class="card rounded-lg p-6 flex items-center space-x-4"
+                        >
+                            <span class="icon-color-4 text-2xl font-bold"
+                                >3</span
+                            >
+                            <p>
+                                Autonomous AI Development:
+                                <span class="font-semibold"
+                                    >AI Agents Building Apps</span
+                                >
+                            </p>
+                        </div>
+                        <div
+                            class="card rounded-lg p-6 flex items-center space-x-4"
+                        >
+                            <span class="icon-color-5 text-2xl font-bold"
+                                >4</span
+                            >
+                            <p>
+                                The Human's Role: What to Automate, What to
+                                Control
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <p class="text-center mt-12 text-2xl">The goal is not to <span class="font-semibold text-red-300">replace</span> developers, but to <span class="font-semibold icon-color-4">supercharge</span> them.</p>
+                <div class="footer">Agenda</div>
+                <div class="slide-number">3 / 16</div>
             </div>
-            <div class="footer">The Human-AI Partnership</div>
-            <div class="slide-number">12 / 14</div>
-        </div>
 
-        <!-- Slide 13: Key Takeaways -->
-        <div class="slide" id="slide13">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content">
-                <h2 class="text-5xl font-bold mb-12 text-center">Key Takeaways</h2>
-                <div class="space-y-4 text-xl">
-                    <div class="card rounded-lg p-5">1. Developer workflows are shifting from <span class="icon-color-4">assistance</span> to <span class="icon-color-5">automation</span>.</div>
-                    <div class="card rounded-lg p-5">2. Start small with semi-autonomous tools like <span class="font-semibold">CLINE</span> inside the IDE.</div>
-                    <div class="card rounded-lg p-5">3. Agentic platforms like <span class="font-semibold">N8N</span> enable fully autonomous, event-driven workflows.</div>
-                    <div class="card rounded-lg p-5">4. The human role shifts to <span class="font-semibold">oversight, review, and high-level strategy</span>.</div>
-                    <div class="card rounded-lg p-5">5. AI-first engineering isn't theory; it's a practical way to <span class="font-semibold">drastically cut delivery times</span>.</div>
+            <!-- Slide 4: NEW - LLM Models -->
+            <div class="slide" id="slide4">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-4 text-center">
+                        The Foundation: LLM Models
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-10">
+                        The "Pre-Agent" Era: Pre-Defined Control Logic
+                    </h3>
+                    <div class="text-center">
+                        <div
+                            class="card rounded-xl p-6 inline-block shadow-lg mb-8"
+                        >
+                            <p class="text-2xl md:text-3xl">
+                                User wants a travel plan for Goa
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flow-diagram">
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg"
+                        >
+                            <div class="node step-hidden step-element step-1">
+                                <i
+                                    class="fas fa-plane-departure text-4xl mb-2"
+                                ></i>
+                                <p>
+                                    User enters Goa as destination and selects
+                                    the dates
+                                </p>
+                            </div>
+                            <div
+                                class="arrow text-4xl step-hidden step-element step-2"
+                            >
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div class="node step-hidden step-element step-2">
+                                <i
+                                    class="fas fa-database text-4xl icon-color-1 mb-2"
+                                ></i>
+                                <p>
+                                    System gathers all data (flights, hotels,
+                                    etc.)
+                                </p>
+                            </div>
+                            <div
+                                class="arrow text-4xl step-hidden step-element step-3"
+                            >
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div class="node step-hidden step-element step-3">
+                                <i
+                                    class="fas fa-brain text-4xl icon-color-4 mb-2"
+                                ></i>
+                                <p>
+                                    LLM receives all data to generate the plan
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <p
+                        class="text-center mt-10 text-xl text-slate-300 step-hidden step-element step-3"
+                    >
+                        Here, the path is rigid. The program gathers all
+                        information upfront and feeds it to the LLM in one go.
+                    </p>
                 </div>
+                <div class="footer">The Evolution of AI</div>
+                <div class="slide-number">4 / 16</div>
             </div>
-            <div class="footer">Conclusion</div>
-            <div class="slide-number">13 / 14</div>
-        </div>
 
-        <!-- Slide 14: Q&A -->
-        <div class="slide" id="slide14">
-            <div class="logo">TestMu Conf</div>
-            <div class="slide-content text-center">
-                <h1 class="text-8xl font-bold mb-8 gradient-text">Q & A</h1>
-                <p class="text-3xl text-slate-300 mb-12">Let's discuss.</p>
-                <div>
-                    <p class="text-2xl font-medium">Gurleen Kaur & Keerthivasan Devaraj</p>
-                    <p class="text-xl text-slate-400">Connect with us: [Your LinkedIn/Twitter]</p>
+            <!-- Slide 5: NEW - AI Agents -->
+            <div class="slide" id="slide5">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2
+                        class="text-5xl font-bold pb-4 text-center gradient-text"
+                    >
+                        The Leap: Autonomous AI Agents
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-10">
+                        A Shift to Autonomy: The Path is NOT Pre-defined
+                    </h3>
+                    <div class="text-center">
+                        <div
+                            class="card rounded-xl p-6 inline-block shadow-lg mb-8"
+                        >
+                            <p class="text-2xl md:text-3xl">
+                                "How much sunscreen should I pack for my trip?"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flow-diagram">
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-lg"
+                        >
+                            <div class="node step-hidden step-element step-1">
+                                <i
+                                    class="fas fa-cloud-sun text-4xl icon-color-4 mb-2"
+                                ></i>
+                                <p>Search the weather</p>
+                            </div>
+                            <div
+                                class="arrow text-2xl step-hidden step-element step-2"
+                            >
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                            </div>
+                            <div class="node step-hidden step-element step-2">
+                                <i
+                                    class="fas fa-sun text-4xl icon-color-4 mb-2"
+                                ></i>
+                                <p>Check UV index</p>
+                            </div>
+                            <div
+                                class="arrow text-2xl step-hidden step-element step-3"
+                            >
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                            </div>
+                            <div class="node step-hidden step-element step-3">
+                                <i
+                                    class="fas fa-flask text-4xl icon-color-5 mb-2"
+                                ></i>
+                                <p>Analyze chemical formulations</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p
+                        class="text-center mt-10 text-xl text-slate-300 step-hidden step-element step-3"
+                    >
+                        The Agent has the autonomy to decide its own steps. It
+                        can use different tools and search for information as
+                        needed to solve the problem.
+                    </p>
                 </div>
+                <div class="footer">The Evolution of AI</div>
+                <div class="slide-number">5 / 16</div>
             </div>
-            <div class="footer">Thank You</div>
-            <div class="slide-number">14 / 14</div>
+
+            <!-- Slide 6: NEW - Multi-Agent Systems -->
+            <div class="slide" id="slide6">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-4 text-center">
+                        The Symphony: Multi-Agent Systems
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-10">
+                        Specialized Agents, Orchestrated for Complex Tasks
+                    </h3>
+                    <div class="text-center">
+                        <div
+                            class="card rounded-xl p-6 inline-block shadow-lg mb-8"
+                        >
+                            <p class="text-2xl md:text-3xl">
+                                "Launch a marketing campaign for our new
+                                product"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flow-diagram">
+                        <div class="text-center mb-6">
+                            <div
+                                class="node inline-block step-hidden step-element step-1"
+                            >
+                                <i
+                                    class="fas fa-bullhorn text-4xl text-white mb-2"
+                                ></i>
+                                <p>
+                                    <strong>Campaign Manager</strong
+                                    ><br />Receives Goal & Coordinates
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center mb-2">
+                            <div
+                                class="arrow text-4xl step-hidden step-element step-2"
+                            >
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                        </div>
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-4 items-start gap-6 text-lg"
+                        >
+                            <div class="node step-hidden step-element step-2">
+                                <i
+                                    class="fas fa-chart-line text-4xl icon-color-1 mb-2"
+                                ></i>
+                                <p>
+                                    <strong>Marketing Strategist</strong
+                                    ><br />Plans campaign details
+                                </p>
+                            </div>
+                            <div class="node step-hidden step-element step-3">
+                                <i
+                                    class="fas fa-palette text-4xl icon-color-3 mb-2"
+                                ></i>
+                                <p>
+                                    <strong>Designer Agent</strong><br />Creates
+                                    visual assets
+                                </p>
+                            </div>
+                            <div class="node step-hidden step-element step-4">
+                                <i
+                                    class="fas fa-pen-fancy text-4xl icon-color-4 mb-2"
+                                ></i>
+                                <p>
+                                    <strong>Content Creator</strong><br />Writes
+                                    copy & content
+                                </p>
+                            </div>
+                            <div class="node step-hidden step-element step-5">
+                                <i
+                                    class="fas fa-share-alt text-4xl icon-color-5 mb-2"
+                                ></i>
+                                <p>
+                                    <strong>Social Media Manager</strong
+                                    ><br />Schedules & publishes
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <p
+                        class="text-center mt-10 text-xl text-slate-300 step-hidden step-element step-5"
+                    >
+                        A specialized team working together. Each agent has
+                        expertise in their domain, collaborating to deliver a
+                        complete marketing campaign.
+                    </p>
+                </div>
+                <div class="footer">The Evolution of AI</div>
+                <div class="slide-number">6 / 16</div>
+            </div>
+
+            <!-- Slide 7: The Problem -->
+            <div class="slide" id="slide7">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2
+                        class="text-5xl font-bold mb-8 text-center gradient-text"
+                    >
+                        The Developer's "Toil"
+                    </h2>
+                    <p class="text-2xl text-center text-slate-300 mb-12">
+                        So much of a developer's time is spent on tasks that
+                        aren't pure coding.
+                    </p>
+                    <div
+                        class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+                    >
+                        <div class="card rounded-lg p-6">
+                            <i
+                                class="fas fa-code-branch text-4xl icon-color-1 mb-3"
+                            ></i>
+                            <h3 class="text-xl font-semibold">
+                                Branching & Merging
+                            </h3>
+                        </div>
+                        <div class="card rounded-lg p-6">
+                            <i
+                                class="fas fa-ticket-alt text-4xl icon-color-5 mb-3"
+                            ></i>
+                            <h3 class="text-xl font-semibold">
+                                Ticket Updates
+                            </h3>
+                        </div>
+                        <div class="card rounded-lg p-6">
+                            <i
+                                class="fas fa-cogs text-4xl icon-color-4 mb-3"
+                            ></i>
+                            <h3 class="text-xl font-semibold">
+                                Boilerplate Code
+                            </h3>
+                        </div>
+                        <div class="card rounded-lg p-6">
+                            <i
+                                class="fas fa-sync-alt text-4xl icon-color-3 mb-3"
+                            ></i>
+                            <h3 class="text-xl font-semibold">
+                                Context Switching
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">The Problem Space</div>
+                <div class="slide-number">7 / 16</div>
+            </div>
+
+            <!-- Slide 8: Meet CLINE -->
+            <div class="slide" id="slide8">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2
+                        class="text-5xl font-bold text-center mb-8 gradient-text"
+                    >
+                        Meet CLINE
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-12">
+                        Your AI Pair Programmer in VS Code
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="card p-8 rounded-lg">
+                            <h4
+                                class="text-2xl font-bold mb-6 flex items-center"
+                            >
+                                What CLINE Can Do
+                            </h4>
+                            <div class="space-y-4 text-lg">
+                                <div class="flex items-center">
+                                    <i
+                                        class="fas fa-file-code mr-3 icon-color-1"
+                                    ></i
+                                    >Read entire codebase
+                                </div>
+                                <div class="flex items-center">
+                                    <i
+                                        class="fas fa-plus-square mr-3 icon-color-5"
+                                    ></i
+                                    >Create & modify files
+                                </div>
+                                <div class="flex items-center">
+                                    <i
+                                        class="fas fa-terminal mr-3 icon-color-2"
+                                    ></i
+                                    >Run terminal commands
+                                </div>
+                                <div class="flex items-center">
+                                    <i
+                                        class="fas fa-globe mr-3 icon-color-4"
+                                    ></i
+                                    >Browser automation
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-plug mr-3 icon-color-3"></i
+                                    >Connect to MCPs
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-8 rounded-lg">
+                            <h4
+                                class="text-2xl font-bold mb-6 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-workflow mr-3 icon-color-5"
+                                ></i>
+                                Our CLINE Rules
+                            </h4>
+                            <div
+                                class="bg-black bg-opacity-60 rounded-lg overflow-hidden border border-white border-opacity-10"
+                            >
+                                <div
+                                    class="bg-white bg-opacity-5 px-4 py-3 border-b border-white border-opacity-10 flex items-center gap-2"
+                                >
+                                    <div class="flex gap-2">
+                                        <div
+                                            class="w-3 h-3 rounded-full bg-red-500"
+                                        ></div>
+                                        <div
+                                            class="w-3 h-3 rounded-full bg-yellow-500"
+                                        ></div>
+                                        <div
+                                            class="w-3 h-3 rounded-full bg-green-500"
+                                        ></div>
+                                    </div>
+                                    <span
+                                        class="text-slate-400 text-sm font-mono"
+                                        >.clinerules/workflow.md</span
+                                    >
+                                </div>
+                                <div
+                                    class="p-4 font-mono text-sm text-slate-300"
+                                >
+                                    <div class="text-green-400">
+                                        # Jira Workflow Rules
+                                    </div>
+                                    <div>1. Parse Jira ID from user input</div>
+                                    <div>2. Fetch ticket details from Jira</div>
+                                    <div>
+                                        3. Create branch:
+                                        feaute/hotfix/bug_{jira-id}
+                                    </div>
+                                    <div>4. Analyze codebase for changes</div>
+                                    <div>5. Write code following patterns</div>
+                                    <div>6. Commit: "{jira-id}: {summary}"</div>
+                                    <div>7. Create PR with ticket link</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">Solution: CLINE Workflow</div>
+                <div class="slide-number">8 / 16</div>
+            </div>
+
+            <!-- Slide 9: CLINE Workflow Demo -->
+            <div class="slide" id="slide9">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-4 text-center">
+                        CLINE Workflow in Action
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-12">
+                        From Jira Ticket to Pull Request
+                    </h3>
+
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-5 items-center mb-8 flow-diagram"
+                    >
+                        <div
+                            class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                        >
+                            <i
+                                class="fas fa-user-edit text-4xl icon-color-1 mb-3"
+                            ></i>
+                            <h4 class="text-lg font-semibold mb-2">
+                                Developer inputs:
+                            </h4>
+                            <p class="text-sm text-slate-300">
+                                "Solve PROJ-1234"
+                            </p>
+                        </div>
+                        <div class="arrow text-4xl text-center">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div
+                            class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                        >
+                            <i
+                                class="fab fa-jira text-4xl icon-color-2 mb-3"
+                            ></i>
+                            <h4 class="text-lg font-semibold mb-2">
+                                CLINE fetches
+                            </h4>
+                            <p class="text-sm text-slate-300">
+                                Jira ticket details
+                            </p>
+                        </div>
+                        <div class="arrow text-4xl text-center">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div
+                            class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                        >
+                            <i
+                                class="fas fa-brain text-4xl icon-color-3 mb-3"
+                            ></i>
+                            <h4 class="text-lg font-semibold mb-2">Analyzes</h4>
+                            <p class="text-sm text-slate-300">
+                                codebase & requirements
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-5 items-center flow-diagram"
+                    >
+                        <div
+                            class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                        >
+                            <i
+                                class="fas fa-code-branch text-4xl icon-color-4 mb-3"
+                            ></i>
+                            <h4 class="text-lg font-semibold mb-2">
+                                Creates branch
+                            </h4>
+                            <p class="text-sm text-slate-300">
+                                PROJ-1234-feature
+                            </p>
+                        </div>
+                        <div class="arrow text-4xl text-center">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div
+                            class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                        >
+                            <i
+                                class="fas fa-code text-4xl icon-color-5 mb-3"
+                            ></i>
+                            <h4 class="text-lg font-semibold mb-2">
+                                Writes code
+                            </h4>
+                            <p class="text-sm text-slate-300">
+                                following patterns
+                            </p>
+                        </div>
+                        <div class="arrow text-4xl text-center">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div
+                            class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                        >
+                            <i
+                                class="fas fa-code-pull-request text-4xl icon-color-1 mb-3"
+                            ></i>
+                            <h4 class="text-lg font-semibold mb-2">
+                                Creates PR
+                            </h4>
+                            <p class="text-sm text-slate-300">
+                                ready for review
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-10">
+                        <div class="card rounded-xl p-6 inline-block">
+                            <p class="text-xl">
+                                <strong>Result:</strong> From ticket assignment
+                                to PR in
+                                <span class="gradient-text font-bold"
+                                    >minutes</span
+                                >
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">Solution: CLINE Workflow</div>
+                <div class="slide-number">9 / 16</div>
+            </div>
+
+            <!-- Slide 10: The MCP Problem -->
+            <div class="slide" id="slide10">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-4 text-center">
+                        The Tool Integration Problem
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-10">
+                        Before MCPs: The N×M Complexity
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        <div
+                            class="card p-6 rounded-lg step-hidden step-element step-1"
+                        >
+                            <h4
+                                class="text-2xl font-bold mb-4 text-red-300 flex items-center"
+                            >
+                                <i class="fas fa-times-circle mr-3"></i>
+                                The Old Way
+                            </h4>
+                            <p class="text-lg text-slate-300 mb-4">
+                                Every LLM provider had their own function
+                                calling way:
+                            </p>
+                            <div class="space-y-3 text-base">
+                                <div
+                                    class="bg-red-900 bg-opacity-30 p-3 rounded"
+                                >
+                                    <strong>GPT:</strong> Custom JSON schema for
+                                    Jira
+                                </div>
+                                <div
+                                    class="bg-red-900 bg-opacity-30 p-3 rounded"
+                                >
+                                    <strong>Claude:</strong> Different JSON for
+                                    same Jira tool
+                                </div>
+                                <div
+                                    class="bg-red-900 bg-opacity-30 p-3 rounded"
+                                >
+                                    <strong>Gemini:</strong> Yet another format
+                                    for Jira
+                                </div>
+                            </div>
+                            <p class="text-lg text-red-300 mt-4 font-semibold">
+                                Result: 3 tools × 3 providers = 9
+                                implementations!
+                            </p>
+                        </div>
+
+                        <div
+                            class="card p-6 rounded-lg step-hidden step-element step-2"
+                        >
+                            <h4
+                                class="text-2xl font-bold mb-4 text-green-300 flex items-center"
+                            >
+                                <i class="fas fa-check-circle mr-3"></i>
+                                The MCP Way
+                            </h4>
+                            <p class="text-lg text-slate-300 mb-4">
+                                One standard protocol for all LLMs:
+                            </p>
+                            <div class="space-y-3 text-base">
+                                <div
+                                    class="bg-green-900 bg-opacity-30 p-3 rounded text-center"
+                                >
+                                    <strong>Single Jira MCP Server</strong>
+                                </div>
+                                <div
+                                    class="bg-green-900 bg-opacity-30 p-3 rounded text-center"
+                                >
+                                    <i
+                                        class="fas fa-exchange-alt mr-2 rotate-90"
+                                    ></i
+                                    ><strong>Standard MCP Protocol</strong>
+                                </div>
+                                <div
+                                    class="bg-green-900 bg-opacity-30 p-3 rounded text-center"
+                                >
+                                    <strong>All LLMs connect seamlessly</strong>
+                                </div>
+                            </div>
+                            <p
+                                class="text-lg text-green-300 mt-4 font-semibold"
+                            >
+                                Migrate from Jira to Trello? Just swap the MCP
+                                server!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <div
+                            class="card p-6 inline-block max-w-4xl rounded-lg step-hidden step-element step-3"
+                        >
+                            <h4 class="text-xl font-bold mb-3">
+                                Think REST APIs for AI Tools
+                            </h4>
+                            <p class="text-lg text-slate-300">
+                                Just like REST standardized web APIs (GET, POST,
+                                PUT, DELETE),<br />
+                                <span class="gradient-text font-semibold"
+                                    >MCPs standardize how LLMs interact with
+                                    tools</span
+                                >
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">Solution: CLINE Workflow</div>
+                <div class="slide-number">10 / 16</div>
+            </div>
+
+            <!-- Slide 11: What are MCPs? -->
+            <div class="slide" id="slide11">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2
+                        class="text-5xl font-bold mb-8 text-center gradient-text"
+                    >
+                        Our Custom MCPs for Devs & QAs
+                    </h2>
+                    <p class="text-2xl text-center text-slate-300 mb-12">
+                        MCPs (Multi-Copilot Prompts) are our custom, remote
+                        tools that give the agent superpowers.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="card rounded-lg p-6 text-center">
+                            <i
+                                class="fab fa-jira text-5xl icon-color-1 mb-4"
+                            ></i>
+                            <h3 class="text-2xl font-semibold mb-2">
+                                Jira Tool
+                            </h3>
+                            <p class="text-slate-400">
+                                Read tickets, add comments, update status.
+                            </p>
+                        </div>
+                        <div class="card rounded-lg p-6 text-center">
+                            <i
+                                class="fab fa-github text-5xl text-white mb-4"
+                            ></i>
+                            <h3 class="text-2xl font-semibold mb-2">
+                                GitHub Tool
+                            </h3>
+                            <p class="text-slate-400">
+                                Check out branches, analyze repos, raise PRs.
+                            </p>
+                        </div>
+                        <div class="card rounded-lg p-6 text-center">
+                            <i
+                                class="fab fa-confluence text-5xl icon-color-2 mb-4"
+                            ></i>
+                            <h3 class="text-2xl font-semibold mb-2">
+                                Confluence Tool
+                            </h3>
+                            <p class="text-slate-400">
+                                Search for documentation and context.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-center mt-12 text-xl">
+                        Exposed as SSE endpoints that CLINE connects to, making
+                        the system modular and extensible.
+                    </p>
+                </div>
+                <div class="footer">Solution: CLINE Workflow</div>
+                <div class="slide-number">10 / 16</div>
+            </div>
+
+            <!-- Slide 11: Solution Part 2 - N8N -->
+            <div class="slide" id="slide11">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-4 text-center">
+                        The Next Frontier: Full Autonomy
+                    </h2>
+                    <h3 class="text-3xl text-center text-slate-300 mb-10">
+                        With
+                        <span class="font-semibold icon-color-5">N8N</span>
+                        Agentic Workflows
+                    </h3>
+                    <div class="flow-diagram">
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-5 items-center text-lg"
+                        >
+                            <div
+                                class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                            >
+                                <i
+                                    class="fab fa-jira text-4xl icon-color-1 mb-2"
+                                ></i>
+                                <p>
+                                    Ticket is assigned<br />to "AI" user<br />profile
+                                </p>
+                            </div>
+                            <div class="arrow text-4xl">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div
+                                class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                            >
+                                <i
+                                    class="fas fa-brain text-4xl icon-color-4 mb-2"
+                                ></i>
+                                <p>
+                                    <strong class="font-semibold"
+                                        >Software Dev Agent</strong
+                                    >
+                                    analyzes requirements
+                                </p>
+                            </div>
+                            <div class="arrow text-4xl">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                            <div
+                                class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                            >
+                                <i
+                                    class="fas fa-drafting-compass text-4xl icon-color-3 mb-2"
+                                ></i>
+                                <p>
+                                    <strong class="font-semibold"
+                                        >Design Studio Agent</strong
+                                    >
+                                    creates LLD/HLD
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center my-4">
+                            <div
+                                class="arrow text-4xl transform rotate-90 md:rotate-0"
+                            >
+                                <i class="fas fa-arrow-down md:hidden"></i>
+                            </div>
+                        </div>
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-5 items-center text-lg md:mt-4"
+                        >
+                            <div
+                                class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                            >
+                                <i
+                                    class="fas fa-code-pull-request text-4xl icon-color-5 mb-2"
+                                ></i>
+                                <p>PR raised for human review</p>
+                            </div>
+                            <div class="arrow text-4xl">
+                                <i class="fas fa-arrow-left"></i>
+                            </div>
+                            <div
+                                class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                            >
+                                <i
+                                    class="fas fa-cogs text-4xl icon-color-1 mb-2"
+                                ></i>
+                                <p>
+                                    <strong class="font-semibold"
+                                        >Developer Agent</strong
+                                    >
+                                    writes code
+                                </p>
+                            </div>
+                            <div class="arrow text-4xl">
+                                <i class="fas fa-arrow-left"></i>
+                            </div>
+                            <div
+                                class="card rounded-xl p-6 text-center min-h-32 flex flex-col justify-center"
+                            >
+                                <i
+                                    class="fas fa-user-check text-4xl text-white mb-2"
+                                ></i>
+                                <p>Human confirms design in Jira</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">Solution: N8N Workflow</div>
+                <div class="slide-number">11 / 16</div>
+            </div>
+
+            <!-- Slide 12: Beyond Features - Autonomous RCA -->
+            <div class="slide" id="slide12">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content text-center">
+                    <h2 class="text-5xl font-bold mb-8">
+                        It's Not Just for Features
+                    </h2>
+                    <p class="text-2xl text-slate-300 mb-12">
+                        We also use autonomous agents for production operations.
+                    </p>
+                    <div
+                        class="card rounded-lg p-8 inline-flex items-center space-x-6 shadow-lg max-w-2xl"
+                    >
+                        <i class="fas fa-chart-line text-6xl icon-color-4"></i>
+                        <div class="text-left">
+                            <h3 class="text-3xl font-semibold mb-2">
+                                Autonomous RCA Agent
+                            </h3>
+                            <p class="text-xl text-slate-300">
+                                Monitors
+                                <span class="font-semibold">Grafana</span> for
+                                alerts, investigates logs, and performs a Root
+                                Cause Analysis.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-xl text-slate-300 mt-8">
+                        Shifting from reactive to
+                        <span class="font-semibold text-slate-200"
+                            >proactive</span
+                        >
+                        AI-driven operations.
+                    </p>
+                </div>
+                <div class="footer">Expanding the Scope</div>
+                <div class="slide-number">12 / 16</div>
+            </div>
+
+            <!-- Slide 12: The Human Role -->
+            <div class="slide" id="slide12">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2
+                        class="text-5xl font-bold mb-12 text-center gradient-text"
+                    >
+                        Where Do Humans Fit In?
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg">
+                        <div class="card rounded-lg p-6 border-green-400/30">
+                            <h3
+                                class="text-2xl font-semibold mb-3 text-green-300"
+                            >
+                                What to Automate
+                                <i class="fas fa-robot ml-2"></i>
+                            </h3>
+                            <ul
+                                class="list-disc list-inside space-y-2 text-slate-300"
+                            >
+                                <li>Initial code generation & boilerplate</li>
+                                <li>Branching, commits, and PR creation</li>
+                                <li>Ticket status updates and comments</li>
+                                <li>
+                                    Initial analysis and data gathering (RCA)
+                                </li>
+                                <li>Repetitive, predictable tasks</li>
+                            </ul>
+                        </div>
+                        <div class="card rounded-lg p-6 border-red-400/30">
+                            <h3
+                                class="text-2xl font-semibold mb-3 text-red-300"
+                            >
+                                What to Control
+                                <i class="fas fa-user-shield ml-2"></i>
+                            </h3>
+                            <ul
+                                class="list-disc list-inside space-y-2 text-slate-300"
+                            >
+                                <li>Final code review and approval</li>
+                                <li>Complex architectural decisions</li>
+                                <li>Confirming high-level designs (HLD/LLD)</li>
+                                <li>
+                                    Defining initial requirements (the Jira
+                                    ticket)
+                                </li>
+                                <li>Handling novel, unexpected problems</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text-center mt-12 text-2xl">
+                        The goal is not to
+                        <span class="font-semibold text-red-300">replace</span>
+                        developers, but to
+                        <span class="font-semibold icon-color-4"
+                            >supercharge</span
+                        >
+                        them.
+                    </p>
+                </div>
+                <div class="footer">The Human-AI Partnership</div>
+                <div class="slide-number">13 / 16</div>
+            </div>
+
+            <!-- Slide 13: Key Takeaways -->
+            <div class="slide" id="slide13">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content">
+                    <h2 class="text-5xl font-bold mb-12 text-center">
+                        Key Takeaways
+                    </h2>
+                    <div class="space-y-4 text-xl">
+                        <div class="card rounded-lg p-5">
+                            1. Developer workflows are shifting from
+                            <span class="icon-color-4">assistance</span> to
+                            <span class="icon-color-5">automation</span>.
+                        </div>
+                        <div class="card rounded-lg p-5">
+                            2. Start small with semi-autonomous tools like
+                            <span class="font-semibold">CLINE</span> inside the
+                            IDE.
+                        </div>
+                        <div class="card rounded-lg p-5">
+                            3. Agentic platforms like
+                            <span class="font-semibold">N8N</span> enable fully
+                            autonomous, event-driven workflows.
+                        </div>
+                        <div class="card rounded-lg p-5">
+                            4. The human role shifts to
+                            <span class="font-semibold"
+                                >oversight, review, and high-level
+                                strategy</span
+                            >.
+                        </div>
+                        <div class="card rounded-lg p-5">
+                            5. AI-first engineering isn't theory; it's a
+                            practical way to
+                            <span class="font-semibold"
+                                >drastically cut delivery times</span
+                            >.
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">Conclusion</div>
+                <div class="slide-number">14 / 16</div>
+            </div>
+
+            <!-- Slide 14: Important Message -->
+            <div class="slide" id="slide14">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content text-center">
+                    <h2 class="text-6xl font-bold mb-12 gradient-text">Remember</h2>
+                    
+                    <div class="max-w-4xl mx-auto space-y-8">
+                        <div class="card rounded-xl p-8">
+                            <h3 class="text-4xl font-bold mb-6 text-white">
+                                This isn't about the specific tools
+                            </h3>
+                            <p class="text-2xl text-slate-300 leading-relaxed">
+                                It's about embracing an <span class="gradient-text font-bold">AI-first mindset</span>
+                            </p>
+                        </div>
+                        
+                        <p class="text-3xl font-bold text-white">
+                            Adapt to <span class="icon-color-5">your</span> context. 
+                            Find <span class="icon-color-1">your</span> workflow. 
+                            Build <span class="icon-color-3">your</span> future.
+                        </p>
+                    </div>
+                </div>
+                <div class="footer">The Mindset Matters</div>
+                <div class="slide-number">15 / 16</div>
+            </div>
+
+            <!-- Slide 15: Q&A -->
+            <div class="slide" id="slide15">
+                <div class="logo">Testμ Conf'25</div>
+                <div class="slide-content text-center">
+                    <h1 class="text-8xl font-bold mb-8 gradient-text">Q & A</h1>
+                    <p class="text-3xl text-slate-300 mb-12">Let's discuss.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-8">
+                        <div class="text-center">
+                            <div class="card p-6 rounded-lg mb-4 w-[17rem] ml-auto">
+                                <!-- QR Code -->
+                                <div class="w-32 h-32 mx-auto mb-4">
+                                    <img src="gurleen-kaur.png" alt="Gurleen's LinkedIn QR Code" class="w-full h-full object-contain rounded-lg">
+                                </div>
+                                <h3 class="text-xl font-bold mb-2">Gurleen Kaur</h3>
+                                <p class="text-slate-400 text-sm">AI Software Engineer</p>
+                                <p class="text-slate-400 text-sm">Piramal Finance</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="card p-6 rounded-lg mb-4 w-[17rem]">
+                                <!-- QR Code -->
+                                <div class="w-32 h-32 mx-auto mb-4">
+                                    <img src="keerthivasan-devaraj.png" alt="Keerthivasan's LinkedIn QR Code" class="w-full h-full object-contain rounded-lg">
+                                </div>
+                                <h3 class="text-xl font-bold mb-2">Keerthivasan Devaraj</h3>
+                                <p class="text-slate-400 text-sm">AI Software Engineer</p>
+                                <p class="text-slate-400 text-sm">Piramal Finance</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-lg text-slate-300">
+                            <i class="fab fa-linkedin mr-2 icon-color-1"></i>
+                            Scan to connect with us on LinkedIn
+                        </p>
+                    </div>
+                </div>
+                <div class="footer">Thank You</div>
+                <div class="slide-number">16 / 16</div>
+            </div>
         </div>
 
-    </div>
+        <script>
+            // Progressive presentation system
+            let currentSlide = 0;
+            let currentStep = 0;
 
-    <script>
-        // Simple scroll navigation for presentation effect
-        document.addEventListener('keydown', function(event) {
-            const container = document.querySelector('.slide-container');
-            const slides = document.querySelectorAll('.slide');
-            const currentSlideIndex = Math.round(container.scrollTop / window.innerHeight);
+            // Define which slides have progressive steps
+            const progressiveSlides = {
+                3: 3, // Slide 4 (LLM) has 3 steps
+                4: 3, // Slide 5 (Agents) has 3 steps
+                5: 5, // Slide 6 (Multi-Agent) has 5 steps
+                9: 3, // Slide 10 (N8N) has 5 steps
+            };
 
-            if (event.key === 'ArrowDown' || event.key === 'ArrowRight' || event.key === ' ') {
-                event.preventDefault();
-                if (currentSlideIndex < slides.length - 1) {
-                    container.scrollTop = slides[currentSlideIndex + 1].offsetTop;
-                }
-            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-                event.preventDefault();
-                if (currentSlideIndex > 0) {
-                    container.scrollTop = slides[currentSlideIndex - 1].offsetTop;
+            function initializeSlide(slideIndex) {
+                currentSlide = slideIndex;
+                currentStep = 0;
+
+                // Hide all step elements in current slide
+                const slide = document.getElementById(`slide${slideIndex + 1}`);
+                if (slide) {
+                    const stepElements =
+                        slide.querySelectorAll('.step-element');
+                    stepElements.forEach((el) => {
+                        el.classList.add('step-hidden');
+                        el.classList.remove('step-visible');
+                    });
                 }
             }
-        });
-    </script>
-</body>
+
+            function showNextStep() {
+                const slide = document.getElementById(
+                    `slide${currentSlide + 1}`
+                );
+                if (!slide) return false;
+
+                const maxSteps = progressiveSlides[currentSlide] || 0;
+                if (maxSteps === 0) return false; // No progressive steps for this slide
+
+                if (currentStep < maxSteps) {
+                    const stepElements = slide.querySelectorAll(
+                        `.step-${currentStep + 1}`
+                    );
+                    stepElements.forEach((el) => {
+                        el.classList.remove('step-hidden');
+                        el.classList.add('step-visible');
+                    });
+                    currentStep++;
+                    return true;
+                }
+
+                return false; // No more steps
+            }
+
+            function hideCurrentStep() {
+                const slide = document.getElementById(
+                    `slide${currentSlide + 1}`
+                );
+                if (!slide) return false;
+
+                if (currentStep > 0) {
+                    const stepElements = slide.querySelectorAll(
+                        `.step-${currentStep}`
+                    );
+                    stepElements.forEach((el) => {
+                        el.classList.add('step-hidden');
+                        el.classList.remove('step-visible');
+                    });
+                    currentStep--;
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Enhanced navigation with progressive steps
+            document.addEventListener('keydown', function (event) {
+                const container = document.querySelector('.slide-container');
+                const slides = document.querySelectorAll('.slide');
+                const currentSlideIndex = Math.round(
+                    container.scrollTop / window.innerHeight
+                );
+
+                // Update current slide if changed
+                if (currentSlideIndex !== currentSlide) {
+                    initializeSlide(currentSlideIndex);
+                }
+
+                if (
+                    event.key === 'ArrowDown' ||
+                    event.key === 'ArrowRight' ||
+                    event.key === ' '
+                ) {
+                    event.preventDefault();
+
+                    // Try to show next step first
+                    if (!showNextStep()) {
+                        // No more steps, go to next slide
+                        if (currentSlideIndex < slides.length - 1) {
+                            container.scrollTop =
+                                slides[currentSlideIndex + 1].offsetTop;
+                        }
+                    }
+                } else if (
+                    event.key === 'ArrowUp' ||
+                    event.key === 'ArrowLeft'
+                ) {
+                    event.preventDefault();
+
+                    // Try to hide current step first
+                    if (!hideCurrentStep()) {
+                        // No more steps to hide, go to previous slide
+                        if (currentSlideIndex > 0) {
+                            container.scrollTop =
+                                slides[currentSlideIndex - 1].offsetTop;
+                        }
+                    }
+                }
+            });
+
+            // Click navigation support
+            document.addEventListener('click', function (event) {
+                // Only trigger on background clicks, not on specific elements
+                if (
+                    event.target.closest('.card') ||
+                    event.target.closest('.node')
+                ) {
+                    return;
+                }
+
+                const container = document.querySelector('.slide-container');
+                const slides = document.querySelectorAll('.slide');
+                const currentSlideIndex = Math.round(
+                    container.scrollTop / window.innerHeight
+                );
+
+                if (currentSlideIndex !== currentSlide) {
+                    initializeSlide(currentSlideIndex);
+                }
+
+                // Try to show next step, or advance to next slide
+                if (!showNextStep()) {
+                    if (currentSlideIndex < slides.length - 1) {
+                        container.scrollTop =
+                            slides[currentSlideIndex + 1].offsetTop;
+                    }
+                }
+            });
+
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                initializeSlide(0);
+            });
+        </script>
+    </body>
 </html>
